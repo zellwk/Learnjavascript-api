@@ -1,0 +1,21 @@
+{
+  "name": "learn-javascrip-api",
+  "version": "0.1.0",
+  "description": "API created for Learn JavaScript course ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Zell Liew",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "express-validator": "^5.3.0",
+    "mongoose": "^5.2.12",
+    "passport-local-mongoose": "^5.0.1",
+    "pm2": "^3.0.4"
+  }
+}
