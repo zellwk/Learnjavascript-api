@@ -6,7 +6,7 @@ const maxMemory = process.env.WEB_MEMORY || 512
 pm2.connect(function () {
   pm2.start({
     script: 'start.js',
-    name: 'zellwk.com',
+    name: 'Learn JavaScript API',
     exec_mode: 'cluster',
     watch: false,
     instances: instances,

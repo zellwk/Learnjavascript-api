@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 const isProduction = process.env.NODE_ENV === 'production'
 const database = process.env.MONGO_URL
-const port = isProduction ? 8765 : 4000
+const port = isProduction ? 5556 : 4000
 
 mongoose.Promise = global.Promise
 mongoose.connect(database)
