@@ -1,17 +1,34 @@
-const mongoose = require('../helpers/mongoose')
 const createError = require('http-errors')
+const bcrypt = require('bcrypt')
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+
+// Models
 const Task = require('./Task')
-mongoose.Promise = global.Promise
 
 const userSchema = new Schema({
   username: {
     type: String,
-    required: 'Username not provided!',
+    required: true,
     unique: true,
     lowercase: true,
     trim: true
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true
   }
+})
+
+userSchema.methods.verifyPassword = async function (password) {
+  return bcrypt.compare(password, this.password)
+}
+
+userSchema.pre('save', async function (next) {
+  const salt = await bcrypt.genSalt()
+  const password = this.password
+  this.password = await bcrypt.hash(password, salt)
 })
 
 // Creates 3 new tasks for every new user created.
@@ -27,11 +44,26 @@ userSchema.post('save', async function (doc) {
   await Task.create(tasksToCreate)
 })
 
-userSchema.post('save', function (error, doc, next) {
-  if (error.name === 'MongoError' && error.code === 11000) {
-    return next(createError(400, 'Username already exists'))
+// Handling errors from Mongoose in a friendly way
+userSchema.post('save', async function (error, doc, next) {
+  // Errors thrown by Mongoose
+  for (const err in error.errors) {
+    if (err === 'username') throw createError(400, 'Username required')
+    if (err === 'password') throw createError(400, 'Password required')
   }
-  next(error)
+
+  if (error.code === 11000 && error.errmsg.includes('username')) {
+    throw createError(400, 'Username already exists')
+  }
+})
+
+// Throws error if not found
+userSchema.post('findOne', async function (doc, next) {
+  if (!doc) throw createError(404, 'User not found')
+})
+
+userSchema.post('remove', async function (doc) {
+  await Task.deleteMany({ user: doc.id })
 })
 
 // Virtual for 1 to many relationships
@@ -54,6 +86,7 @@ userSchema.set('toObject', {
     ret.id = ret._id
     delete ret._id
     delete ret.__v
+    delete ret.password
     return ret
   }
 })
