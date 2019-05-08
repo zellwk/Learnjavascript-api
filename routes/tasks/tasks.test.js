@@ -77,7 +77,7 @@ const hulk = {
 const hulkAuth = 'Basic ' + btoa(`${hulk.username}:${hulk.password}`)
 const testTaskID = '5cc90aea78f2639483920af0'
 
-describe('Update Task', () => {
+describe('Edit Task', () => {
   it('requires auth', async done => {
     const res = await request
       .put(`/tasks/${testTaskID}`)
@@ -113,6 +113,20 @@ describe('Update Task', () => {
     expect(task._id).toBeTruthy()
     expect(task.name).toBe('Fight fires')
     expect(task.done).toBeTrue()
+
+    // Version 2: When done is set to false
+    await request
+      .put(`/tasks/${testTaskID}`)
+      .set('Authorization', hulkAuth)
+      .send({
+        name: 'Jump around',
+        done: false
+      })
+
+    const task2 = await Task.findOne({ _id: testTaskID })
+    expect(task2.name).toBe('Jump around')
+    expect(task2.done).toBeFalse()
+    expect(task2._id.toString()).toBe(testTaskID)
     done()
   })
 })

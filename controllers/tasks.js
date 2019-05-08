@@ -20,7 +20,7 @@ exports.updateTask = asyncHandler(async (req, res) => {
 
   const task = await Task.findById(id)
   if (name) task.name = name
-  if (done) task.done = done
+  task.done = done
 
   const ret = await task.save()
   res.json(ret)
