@@ -21,14 +21,20 @@ const userSchema = new Schema({
   }
 })
 
-userSchema.methods.verifyPassword = async function (password) {
-  return bcrypt.compare(password, this.password)
+// Methods
+userSchema.methods.generatePasswordHash = function (password, cb) {
+  const salt = bcrypt.genSaltSync(10)
+  return bcrypt.hashSync(password, salt)
 }
 
+userSchema.methods.verifyPassword = function (password, cb) {
+  return bcrypt.compareSync(password, this.password)
+}
+
+// Hashes passwords automatically
 userSchema.pre('save', async function (next) {
-  const salt = await bcrypt.genSalt()
-  const password = this.password
-  this.password = await bcrypt.hash(password, salt)
+  if (!this.isModified('password')) return next()
+  this.password = this.generatePasswordHash(this.password)
 })
 
 // Creates 3 new tasks for every new user created.
