@@ -8,9 +8,9 @@ const morgan = require('morgan')
 // ======================================
 // # Middlewares
 // ======================================
+app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-app.use(cors())
 
 if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'))
