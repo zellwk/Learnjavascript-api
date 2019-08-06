@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node pm2.js",
     "dev": "nodemon start.js",
+    "restart": "pm2 restart 'Learn JavaScript API' --update-env",
     "sync": "node sync.js",
     "test": "jest",
     "test:watch": "jest --watch"
