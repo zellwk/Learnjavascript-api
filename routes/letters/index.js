@@ -206,7 +206,7 @@ router.get('/', (req, res) => {
   function paginationLink (targetPage) {
     const params = new URLSearchParams(req.originalUrl.split('?')[1])
     params.set('page', targetPage)
-    return `${req.protocol}://${req.headers.host}/letters?${params.toString()}`
+    return `https://${req.headers.host}/letters?${params.toString()}`
   }
 
   res.json(result)
