@@ -1,17 +1,24 @@
-const loadFixtures = require('../fixtures')
 const mongoose = require('mongoose')
 const isProduction = process.env.NODE_ENV === 'production'
-const url = isProduction
-  ? `mongodb://${process.env.DB_URL}`
-  : `mongodb://127.0.0.1/learnjavascript-api`
+// ========================
+// Connection String
+// ========================
+const url = dbUrl()
+function dbUrl () {
+  if (isProduction) return process.env.DB_URL
+  return 'mongodb://127.0.0.1/learnjavascript-api'
+}
 
+// ========================
+// Connects to Database
+// ========================
 mongoose.Promise = global.Promise
-// Prevent deprecation warning
-// collection.ensureIndex is deprecated. Use createIndexes instead."
-mongoose.set('useCreateIndex', true)
-mongoose.connect(url, { useNewUrlParser: true })
+mongoose.connect(url, {
+  useNewUrlParser: true, // Silence deprecation warnings
+  useUnifiedTopology: true, // Silence deprecation warnings
+  useCreateIndex: true // Silence deprecation warnings
+})
 
-// Connect to DB
 const db = mongoose.connection
 
 db.once('open', _ => {
@@ -22,5 +29,9 @@ db.on('error', err => {
   console.error('connection error:', err)
 })
 
+// ========================
+// Fixtures
+// ========================
+// const loadFixtures = require('../fixtures')
 // loadFixtures()
 // dropDatabase()
