@@ -1,12 +1,15 @@
 const mongoose = require('mongoose')
-const isProduction = process.env.NODE_ENV === 'production'
 // ========================
 // Connection String
 // ========================
-const url = dbUrl()
-function dbUrl () {
+const url = dbUrl(false)
+function dbUrl (useLocalDB = true) {
+  const isProduction = process.env.NODE_ENV === 'production'
   if (isProduction) return process.env.DB_URL
-  return 'mongodb://127.0.0.1/learnjavascript-api'
+
+  return useLocalDB
+    ? 'mongodb://127.0.0.1/learnjavascript-api'
+    : process.env.DB_URL
 }
 
 // ========================
