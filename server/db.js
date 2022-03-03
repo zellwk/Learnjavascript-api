@@ -18,8 +18,7 @@ function dbUrl (useLocalDB = true) {
 mongoose.Promise = global.Promise
 mongoose.connect(url, {
   useNewUrlParser: true, // Silence deprecation warnings
-  useUnifiedTopology: true, // Silence deprecation warnings
-  useCreateIndex: true // Silence deprecation warnings
+  useUnifiedTopology: true // Silence deprecation warnings
 })
 
 const db = mongoose.connection
