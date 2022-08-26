@@ -30,7 +30,7 @@
     "express-async-handler": "^1.2.0",
     "express-validator": "^6.14.0",
     "http-errors": "^2.0.0",
-    "mongoose": "^6.2.3",
+    "mongoose": "^6.4.6",
     "morgan": "^1.10.0",
     "passport-local-mongoose": "^6.1.0",
     "pm2": "^5.2.0"
